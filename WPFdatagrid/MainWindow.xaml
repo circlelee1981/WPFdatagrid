@@ -1,0 +1,55 @@
+﻿<Window x:Class="WPFdatagrid.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFdatagrid"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/><!--*表示自动, 但如果是2*, 似乎意思是两倍,--> 
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="搜索条件" VerticalAlignment="Center" Margin="10,0,0,0"/> 
+            <!--这个VerticalAlignment, 估计是限制TextBlock自己里面的东西, 而TextBlock与其兄弟元素的对齐方式, 应该在上一级别中-->
+            
+            <TextBox x:Name="SearchTextBox" Width="200" Height="25" Margin="10,0,0,0" Text="{Binding SearchStr}"/>
+            <Button Content="搜索" Width="70" Height="25" Margin="10,0,0,0" Background="Green" Foreground="White"
+                    Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SearchTextBox, Path=Text}"
+                    />
+            <!--注意xaml里的顺时针顺序, 第一个是左边, 然后才是上面, 好像和css不一样-->
+
+            <Button Content="重置" Width="70" Height="25" Margin="10,0,0,0" Background="Green" Foreground="White"
+                    Command="{Binding ResetCommand}" CommandParameter=""
+                    />
+            <Button Content="新增" Width="70" Height="25" Margin="10,0,0,0" Background="Blue"  Foreground="White"/>
+
+
+        </StackPanel>
+
+
+        <DataGrid Grid.Row="1" ColumnWidth="*" AutoGenerateColumns="False" ItemsSource="{Binding StudentGridList}"
+                  CanUserAddRows="False" CanUserDeleteRows="False"
+                  > <!--从0开始, 1表示第二row, *是自适应列宽-->
+            <DataGrid.Columns> <!--刘铁猛说xaml里这种集合的可以不写, 不过有提示, 就按这个来呗-->
+                <DataGridTextColumn Header="序号" Binding="{Binding ID}"/>
+                <DataGridTextColumn Header="姓名" Binding="{Binding Name}"/>
+                <DataGridTemplateColumn Header="操作">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="编辑" Margin="10,0,0,0" Background="Blue" Foreground="White" />
+                                <Button Content="删除" Margin="10,0,0,0" Background="Red" Foreground="White" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+            </DataGrid.Columns>
+            
+        </DataGrid>
+    </Grid>
+</Window>

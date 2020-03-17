@@ -28,5 +28,10 @@ namespace WPFdatagrid
             this.DataContext = vm;
 
         }
+
+
+
+
     }
+
 }

@@ -4,19 +4,110 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFdatagrid"
+        xmlns:Model="clr-namespace:WPFdatagrid.Model"
+        xmlns:VM="clr-namespace:WPFdatagrid.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        x:Name="ThisWin"
+        Title="MainWindow" Height="450" Width="900">
+    <Window.Resources>
+
+        <Style x:Key="ButtonRadius" TargetType="Button">
+            <Setter Property="Width" Value="70"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="SeaGreen"/>
+            <!--43a9c7-->
+            <Setter Property="MinHeight" Value="12.5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                SnapsToDevicePixels="True"
+                                CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent},Path=MinHeight}"
+                                >
+                            <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#2f96b4"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#2a89a4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TextBoxRadius" TargetType="TextBox">
+            <Setter Property="MinHeight" Value="12.5"/>
+            <Setter Property="BorderThickness" Value="2"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="Purple"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border x:Name="borderT" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Background="{TemplateBinding Background}" 
+                            SnapsToDevicePixels="True"
+                            CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent},Path=MinHeight}"
+                            >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}
+                                        ,Path=MinHeight}"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="{Binding RelativeSource={RelativeSource TemplatedParent}
+                                        ,Path=MinHeight}"/>
+                                </Grid.ColumnDefinitions>
+ 
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                                              Grid.Column="1"
+                                              Focusable="false" 
+                                              HorizontalScrollBarVisibility="Hidden" 
+                                              VerticalScrollBarVisibility="Hidden"
+                                              />
+                                <!--<Image Source="/Img/1.png"></Image>-->
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Model:Student x:Key="Stu" ID="100" Name="Mike"/>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="*"/><!--*表示自动, 但如果是2*, 似乎意思是两倍,--> 
+            <RowDefinition Height="*"/>
+            <!--*表示自动, 但如果是2*, 似乎意思是两倍,-->
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="搜索条件" VerticalAlignment="Center" Margin="10,0,0,0"/> 
+            <TextBlock Text="搜索条件" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <!--这个VerticalAlignment, 估计是限制TextBlock自己里面的东西, 而TextBlock与其兄弟元素的对齐方式, 应该在上一级别中-->
-            
-            <TextBox x:Name="SearchTextBox" Width="200" Height="25" Margin="10,0,0,0" Text="{Binding SearchStr}"/>
+
+            <TextBox x:Name="SearchTextBox" Width="200" Height="25" Margin="10,0,0,0" 
+                     BorderThickness="2" 
+                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="12"/>
+                        <!--<Setter Property="BorderBrush" Value="Blue"/>-->
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+
+
+
             <Button Content="搜索" Width="70" Height="25" Margin="10,0,0,0" Background="Green" Foreground="White"
                     Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SearchTextBox, Path=Text}"
                     />
@@ -27,17 +118,34 @@
                     />
             <Button Content="新增" Width="70" Height="25" Margin="10,0,0,0" Background="Blue"  Foreground="White"/>
 
+            <Button Content="button" Height="25" Width="70" Margin="10,0,0,0" 
+                    Style="{StaticResource ButtonRadius}" MinHeight="12"
+                    Background="SeaGreen" />
+            <Button Content="btn2" Margin="10,0,0,0" Style="{StaticResource ButtonRadius}"/>
+            <TextBox Style="{StaticResource TextBoxRadius}" Height="25" Width="100" Margin="10,0,0,0"
+                     MinHeight="12.5" Text="{Binding Source=dg,Path=CurrentItem.Name}"/>
+
+
+
 
         </StackPanel>
 
 
         <DataGrid Grid.Row="1" ColumnWidth="*" AutoGenerateColumns="False" ItemsSource="{Binding StudentGridList}"
                   CanUserAddRows="False" CanUserDeleteRows="False"
-                  > <!--从0开始, 1表示第二row, *是自适应列宽-->
-            <DataGrid.Columns> <!--刘铁猛说xaml里这种集合的可以不写, 不过有提示, 就按这个来呗-->
-                <DataGridTextColumn Header="序号" Binding="{Binding ID}"/>
-                <DataGridTextColumn Header="姓名" Binding="{Binding Name}"/>
-                <DataGridTemplateColumn Header="操作">
+                  GridLinesVisibility="None" SelectionUnit="FullRow" 
+                  IsSynchronizedWithCurrentItem="True"
+                  
+                  x:Name="dg" 
+                  >
+            <!--SelectedCellsChanged="dg_SelectedCellsChanged"-->
+
+            <!--从0开始, 1表示第二row, *是自适应列宽-->
+            <DataGrid.Columns>
+                <!--刘铁猛说xaml里这种集合的可以不写, 不过有提示, 就按这个来呗-->
+                <DataGridTextColumn Header="序号" Binding="{Binding ID}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="姓名" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="操作" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -47,8 +155,14 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
             </DataGrid.Columns>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectedCellsChanged">
+                    <i:InvokeCommandAction Command="{Binding Command1}" CommandParameter="10" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
             
         </DataGrid>
     </Grid>

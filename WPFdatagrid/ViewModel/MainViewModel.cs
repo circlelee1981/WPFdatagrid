@@ -1,6 +1,13 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Prism.Commands;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Input;
 using WPFdatagrid.DB;
 using WPFdatagrid.Model;
 
@@ -43,7 +50,10 @@ namespace WPFdatagrid.ViewModel
             SearchCommand.Execute(string.Empty); //第一次进入界面时直接查询, 用这种方式来调用
 
             ResetCommand = new RelayCommand<string>(Reset);
+
         }
+
+
 
         private LocalDB localDB;
         private ObservableCollection<Student> studentGridList;
@@ -56,6 +66,19 @@ namespace WPFdatagrid.ViewModel
             }
         }
 
+        public CollectionView CV { get; set; }
+        public BindingSource BS;
+        public CollectionViewSource CVS;
+        public BindingListCollectionView BLCV;
+        public ICommand Command1
+        {
+            get
+            {
+                return new DelegateCommand<string>((str) => {
+                    MessageBox.Show("Command1 with parameter:" + str);
+                });
+            }
+        }
 
         //private string searchStr = string.Empty; //注意这个初始值, 还是要有
         //public string SearchStr
@@ -81,6 +104,13 @@ namespace WPFdatagrid.ViewModel
             {
                 StudentGridList.Add(stuEnum);
             }
+
+            //CV = new CollectionView(studentGridList);
+            CVS = new CollectionViewSource();
+            CVS.Source = studentGridList;
+            //BLCV = new BindingListCollectionView(StudentGridList);
+            
+
         }
 
         public void Reset(string name)

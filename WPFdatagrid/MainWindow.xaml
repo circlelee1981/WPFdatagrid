@@ -32,7 +32,7 @@
 
 
         <DataGrid Grid.Row="1" ColumnWidth="*" AutoGenerateColumns="False" ItemsSource="{Binding StudentGridList}"
-                  CanUserAddRows="False" CanUserDeleteRows="False" SelectionUnit="FullRow"
+                  CanUserAddRows="False" CanUserDeleteRows="False"
                   > <!--从0开始, 1表示第二row, *是自适应列宽-->
             <DataGrid.Columns> <!--刘铁猛说xaml里这种集合的可以不写, 不过有提示, 就按这个来呗-->
                 <DataGridTextColumn Header="序号" Binding="{Binding ID}"/>

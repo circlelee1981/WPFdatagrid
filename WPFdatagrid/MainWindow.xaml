@@ -36,7 +36,7 @@
                   > <!--从0开始, 1表示第二row, *是自适应列宽-->
             <DataGrid.Columns> <!--刘铁猛说xaml里这种集合的可以不写, 不过有提示, 就按这个来呗-->
                 <DataGridTextColumn Header="序号" Binding="{Binding ID}"/>
-                <DataGridTextColumn Header="姓名" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="姓名"  Binding="{Binding Name}"/>
                 <DataGridTemplateColumn Header="操作">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
